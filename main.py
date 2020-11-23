@@ -1,8 +1,6 @@
-import collections
 from threading import Thread
 import cv2
 import time
-import numpy as np
 import sys
 (width, height) = 640, 480
 
@@ -44,19 +42,17 @@ class VideoScreenshot(object):
         # Display frames in main program
         while True:
             if self.status:
-                # start = time.time()
-                # final = self.detect()
-                # end = time.time()
-                # self.fps = self.fps * 0.9 + 1 / (end - start) * 0.1
-                # fps = "{:.2f}".format(self.fps)
-                # final = cv2.putText(final, fps, (50, 50),
-                #                     cv2.FONT_HERSHEY_SIMPLEX,
-                #                     1, (255, 0, 0), 2, cv2.LINE_AA)
+                start = time.time()
+                final = self.detect()
+                end = time.time()
+                self.fps = self.fps * 0.9 + 1 / (end - start) * 0.1
+                fps = "{:.2f}".format(self.fps)
+                final = cv2.putText(final, fps, (50, 50),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    1, (255, 0, 0), 2, cv2.LINE_AA)
                 # out.write(final)
                 # cv2.imshow('result', final)
-                img = self.frame.copy()
-                sys.stdout.write(str(img))
-                # sys.stdout.write(str(final))
+                sys.stdout.buffer.write(final.tobytes())
                 # sys.stdout.flush()
             # Press Q on keyboard to stop recording
             # key = cv2.waitKey(1)
