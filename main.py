@@ -71,6 +71,7 @@ class VideoScreenshot(object):
 
 
 if __name__ == '__main__':
+    # video_stream_widget = VideoScreenshot("rtsp://admin:hd2018vt@@27.67.55.46:554/profile2/media.smp")
     video_stream_widget = VideoScreenshot(0)
     print(video_stream_widget.source_fps)
     time.sleep(1)
