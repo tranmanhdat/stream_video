@@ -3,12 +3,13 @@ import time
 import cv2
 
 if __name__ == '__main__':
-    # capture = cv2.VideoCapture("http://localhost:8090/facstream.mjpeg") # local test
-    # capture = cv2.VideoCapture("http://158.58.130.148:80/mjpg/video.mjpg")
+    capture = cv2.VideoCapture("http://localhost:8090/facstream.mjpeg") # local test
+    # capture = cv2.VideoCapture("http://operator:Abc@12345@27.72.105.10:8933/Streaming/channels/101/httpPreview")
     # capture = cv2.VideoCapture("http://210.148.114.53/-wvhttp-01-/GetOneShot?image_size=640x480&frame_count=1000000000")
-    capture = cv2.VideoCapture("rtsp://admin:hd2018vt@@27.67.55.46:554/profile2/media.smp") #viettel
+    # capture = cv2.VideoCapture("rtsp://admin:hd2018vt@@27.67.55.46:554/profile2/media.smp") #viettel
     # capture = cv2.VideoCapture(0)
     print(capture.get(cv2.CAP_PROP_FPS))
+    capture.set(cv2.CAP_PROP_BUFFERSIZE, 1)
     last_frame = None
     start = time.time()
     fps = 0
