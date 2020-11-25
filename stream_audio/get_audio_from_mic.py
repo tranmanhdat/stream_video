@@ -24,7 +24,7 @@ class Recorder:
                         frames_per_buffer=self.chunk)
         while(True):
             data = stream.read(self.chunk)
-            # sys.stdout.buffer.write(data)
+            # sys.stdout.buffer.write(data) # stream here
             recorded_data.append(data)
             if keyboard.is_pressed(self.STOP_KEY):
                 print("Stop recording")
@@ -43,9 +43,9 @@ class Recorder:
     def listen(self):
         print("Press {} to start and {} to quit!".format(self.START_KEY,self.STOP_KEY))
         while True:
-            # if keyboard.is_pressed(self.START_KEY):
-            self.record()
-            break
+            if keyboard.is_pressed(self.START_KEY):
+                self.record()
+                break
 if __name__ == '__main__':
     recorder = Recorder("mic.wav") #name of output file
     recorder.listen()
