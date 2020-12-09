@@ -3,6 +3,7 @@ import cv2
 import time
 import sys
 import numpy as np
+# (width, height) = 1920, 1080
 (width, height) = 640, 480
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
@@ -25,47 +26,44 @@ class VideoScreenshot(object):
         self.thread.daemon = True
         self.thread.start()
 
+        self.alpha = 0.95
         self.status = False
         self.frame = None
+        self.fps_org = 0
         self.fps = 0
-
-        self.face_cascade = cv2.CascadeClassifier(
-            cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         self.net = cv2.dnn.readNetFromCaffe("MobileNetSSD_deploy.prototxt.txt", "MobileNetSSD_deploy.caffemodel")
 
     def update(self):
         # Read the next frame from the stream in a different thread
         while True:
             if self.capture.isOpened():
+                start = time.time()
                 (self.status, frame) = self.capture.read()
                 self.frame = cv2.resize(frame, self.size)
+                end = time.time()
+                self.fps_org = self.fps_org * self.alpha + 1 / (end - start) * (1-self.alpha)
 
     def show_frame(self):
-        # ID = 0
-        # out = cv2.VideoWriter('output_blend.avi',
-        #                       cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 10,
-        #                       (1900, 960))
         # Display frames in main program
         while True:
             if self.status:
                 start = time.time()
                 final = self.detect()
+                final = self.frame
                 end = time.time()
-                self.fps = self.fps * 0.9 + 1 / (end - start) * 0.1
+                self.fps = self.fps * self.alpha + 1 / (end - start) * (1-self.alpha)
                 fps = "{:.2f}".format(self.fps)
+                fps_org = "{:.2f}".format(self.fps_org)
                 final = cv2.putText(final, fps, (50, 50),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    1, (255, 0, 0), 2, cv2.LINE_AA)
+                final = cv2.putText(final, fps_org, (150, 50),
                                     cv2.FONT_HERSHEY_SIMPLEX,
                                     1, (255, 0, 0), 2, cv2.LINE_AA)
                 # out.write(final)
                 # cv2.imshow('result', final)
                 sys.stdout.buffer.write(final.tobytes())
                 # sys.stdout.flush()
-            # Press Q on keyboard to stop recording
-            # key = cv2.waitKey(1)
-            # if key == ord('q'):
-            #     self.capture.release()
-            #     cv2.destroyAllWindows()
-            #     exit(1)
 
     def detect(self):
         img = self.frame.copy()
@@ -106,9 +104,9 @@ class VideoScreenshot(object):
 
 if __name__ == '__main__':
     # video_stream_widget = VideoScreenshot("rtsp://admin:hd2018vt@@27.67.55.46:554/profile2/media.smp")
-    video_stream_widget = VideoScreenshot(
-        "rtsp://operator:Abc@12345@192.168.1.64:554")
-    # video_stream_widget = VideoScreenshot("rtsp://sla:1123456@117.6.121.13:554/axis-media/media.amp")
+    # video_stream_widget = VideoScreenshot(
+    #     "rtsp://operator:Abc@12345@192.168.1.64:554")
+    video_stream_widget = VideoScreenshot("rtsp://sla:1123456@117.6.121.13:554/axis-media/media.amp")
     # video_stream_widget = VideoScreenshot(0)
     print(video_stream_widget.source_fps)
     time.sleep(1)
