@@ -49,7 +49,6 @@ class VideoScreenshot(object):
             if self.status:
                 start = time.time()
                 final = self.detect()
-                final = self.frame
                 end = time.time()
                 self.fps = self.fps * self.alpha + 1 / (end - start) * (1-self.alpha)
                 fps = "{:.2f}".format(self.fps)
