@@ -1,3 +1,4 @@
+import argparse
 from threading import Thread
 import cv2
 import time
@@ -71,6 +72,7 @@ class VideoScreenshot(object):
         # faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
         blob = cv2.dnn.blobFromImage(cv2.resize(img, (300, 300)), 0.007843,
                                      (300, 300), 127.5)
+        blobs = cv2.dnn.blobFromImages()
         self.net.setInput(blob)
         detections = self.net.forward()
 
@@ -102,10 +104,15 @@ class VideoScreenshot(object):
 
 
 if __name__ == '__main__':
-    # video_stream_widget = VideoScreenshot("rtsp://admin:hd2018vt@@27.67.55.46:554/profile2/media.smp")
+    my_parser = argparse.ArgumentParser()
+    my_parser.add_argument('--rtsp_link', '-rtsp', action='store', type=str,
+                           required=True)
+    args = my_parser.parse_args()
+    rtsp = args.rtsp
+    video_stream_widget = VideoScreenshot(rtsp)
     # video_stream_widget = VideoScreenshot(
     #     "rtsp://operator:Abc@12345@192.168.1.64:554")
-    video_stream_widget = VideoScreenshot("rtsp://sla:1123456@117.6.121.13:554/axis-media/media.amp")
+    # video_stream_widget = VideoScreenshot("rtsp://sla:1123456@117.6.121.13:554/axis-media/media.amp")
     # video_stream_widget = VideoScreenshot(0)
     print(video_stream_widget.source_fps)
     time.sleep(1)
