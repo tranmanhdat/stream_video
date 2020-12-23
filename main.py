@@ -72,7 +72,7 @@ class VideoScreenshot(object):
         # faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
         blob = cv2.dnn.blobFromImage(cv2.resize(img, (300, 300)), 0.007843,
                                      (300, 300), 127.5)
-        blobs = cv2.dnn.blobFromImages()
+        # blobs = cv2.dnn.blobFromImages(img)/
         self.net.setInput(blob)
         detections = self.net.forward()
 
@@ -108,7 +108,7 @@ if __name__ == '__main__':
     my_parser.add_argument('--rtsp_link', '-rtsp', action='store', type=str,
                            required=True)
     args = my_parser.parse_args()
-    rtsp = args.rtsp
+    rtsp = args.rtsp_link
     video_stream_widget = VideoScreenshot(rtsp)
     # video_stream_widget = VideoScreenshot(
     #     "rtsp://operator:Abc@12345@192.168.1.64:554")
