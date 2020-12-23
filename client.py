@@ -50,6 +50,6 @@ class VideoScreenshot(object):
                 if key==ord("q"):
                     exit(0)
 if __name__ == '__main__':
-    video_stream_widget = VideoScreenshot("http://localhost:8090/facstream.mjpeg")
+    video_stream_widget = VideoScreenshot("rtsp://sla:1123456@117.6.121.13:554/axis-media/media.amp")
     time.sleep(1)
     video_stream_widget.show_frame()
