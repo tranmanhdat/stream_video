@@ -4,7 +4,8 @@ import time
 import sys
 import numpy as np
 # (width, height) = 1920, 1080
-(width, height) = 640, 480
+# (width, height) = 640, 480
+(width, height) = 1280, 720
 
 class VideoScreenshot(object):
     def __init__(self, src=0):
@@ -34,7 +35,7 @@ class VideoScreenshot(object):
                 (self.status, frame) = self.capture.read()
                 self.frame = cv2.resize(frame, self.size)
                 end = time.time()
-                self.fps_org = self.fps_org * 0.9 + 1 / (end - start) * 0.1
+                self.fps_org = self.fps_org * 0.95 + 1 / (end - start) * 0.05
 
     def show_frame(self):
         # Display frames in main program
@@ -42,7 +43,7 @@ class VideoScreenshot(object):
             if self.status:
                 final = self.frame
                 fps_org = "{:.2f}".format(self.fps_org)
-                final = cv2.putText(final, fps_org, (250, 50),
+                final = cv2.putText(final, "client"+fps_org, (50, 150),
                                     cv2.FONT_HERSHEY_SIMPLEX,
                                     1, (255, 0, 0), 2, cv2.LINE_AA)
                 cv2.imshow('result', final)
@@ -50,6 +51,6 @@ class VideoScreenshot(object):
                 if key==ord("q"):
                     exit(0)
 if __name__ == '__main__':
-    video_stream_widget = VideoScreenshot("rtsp://sla:1123456@117.6.121.13:554/axis-media/media.amp")
+    video_stream_widget = VideoScreenshot("http://localhost:8090/facstream2.mjpeg")
     time.sleep(1)
     video_stream_widget.show_frame()

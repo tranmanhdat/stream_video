@@ -5,7 +5,8 @@ import time
 import sys
 import numpy as np
 # (width, height) = 1920, 1080
-(width, height) = 640, 480
+# (width, height) = 640, 480
+(width, height) = 1280, 720
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
@@ -54,10 +55,10 @@ class VideoScreenshot(object):
                 self.fps = self.fps * self.alpha + 1 / (end - start) * (1-self.alpha)
                 fps = "{:.2f}".format(self.fps)
                 fps_org = "{:.2f}".format(self.fps_org)
-                final = cv2.putText(final, fps, (50, 50),
+                final = cv2.putText(final, "fps detect:"+fps, (50, 50),
                                     cv2.FONT_HERSHEY_SIMPLEX,
                                     1, (255, 0, 0), 2, cv2.LINE_AA)
-                final = cv2.putText(final, fps_org, (150, 50),
+                final = cv2.putText(final, "origin:"+fps_org, (50, 100),
                                     cv2.FONT_HERSHEY_SIMPLEX,
                                     1, (255, 0, 0), 2, cv2.LINE_AA)
                 # out.write(final)
